@@ -18,7 +18,7 @@ struct HomeView: View {
         VStack {
             Spacer();
             NavigationLink {
-                AddTransactionView();
+                AddTransactionView(transactions: $transacations);
             } label: {
                 Text("+")
                     .font(.largeTitle)
