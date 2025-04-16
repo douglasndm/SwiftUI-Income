@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AddTransactionView: View {
+    var transaction: Transaction?;
     
     @State private var amount: Double = 0.0;
     @State private var transactionTitle: String = "";
@@ -79,6 +80,13 @@ struct AddTransactionView: View {
             Spacer();
         }
         .padding(.top)
+        .onAppear(perform: {
+            if let transaction = transaction {
+                amount = transaction.amount;
+                transactionTitle = transaction.title;
+                selectedTransactionType = transaction.type;
+            }
+        })
         .alert(alertTitle, isPresented: $showAlert) {
             Button {
                 
