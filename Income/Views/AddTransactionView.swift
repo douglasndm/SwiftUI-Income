@@ -60,12 +60,24 @@ struct AddTransactionView: View {
                     return;
                 }
                 
-                let transaction = Transaction(title: transactionTitle, type: selectedTransactionType, amount: amount, date: Date());
+                let createdTransaction = Transaction(title: transactionTitle, type: selectedTransactionType, amount: amount, date: Date());
                 
-                transactions.append(transaction);
+                if (transaction != nil) {
+                    guard let index = transactions.firstIndex(of: transaction!) else {
+                        alertTitle = "Transaction was not found";
+                        alertMessage = "The transaction you are trying to update does not exist";
+                        showAlert = true;
+                        return;
+                    }
+                    
+                    transactions[index] = createdTransaction;
+                } else {
+                    transactions.append(createdTransaction);
+                }
+                
                 dismiss();
             } label: {
-                Text("Create")
+                Text(transaction != nil ? "Update" : "Create")
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(height: 40)
