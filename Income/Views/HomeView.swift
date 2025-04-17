@@ -14,29 +14,19 @@ struct HomeView: View {
     @State private var showAddTransactionView: Bool = false;
     @State private var transacationToEdit: Transaction?;
     
-    var expenses: String {
-        var sumExpenses: Double = 0;
-        
-        for transcation in transacations {
-            if transcation.type == .expense {
-                sumExpenses += transcation.amount;
-            }
-        }
-        
+    private var expenses: String {
+        let sumExpenses = transacations.filter({ $0.type == .expense }).reduce(0, {
+            $0 + $1.amount
+        });
+            
         let numberFormatter = NumberFormatter();
         numberFormatter.numberStyle = .currency;
         
         return numberFormatter.string(from: sumExpenses as NSNumber) ?? "R$ 0,00";
     }
     
-    var incomes: String {
-        var sumIncomes: Double = 0;
-        
-        for transcation in transacations {
-            if transcation.type == .income {
-                sumIncomes += transcation.amount;
-            }
-        }
+    private var incomes: String {
+        let sumIncomes = transacations.filter({ $0.type == .income }).reduce(0, { $0 + $1.amount });
         
         let numberFormatter = NumberFormatter();
         numberFormatter.numberStyle = .currency;
@@ -45,17 +35,12 @@ struct HomeView: View {
     }
     
     var balance: String {
-        var total: Double = 0;
+        let sumExpenses = transacations.filter({ $0.type == .expense }).reduce(0, { $0 + $1.amount });
+        let sumIncomes = transacations.filter({ $0.type == .income }).reduce(0, { $0 + $1.amount });
         
-        for transacation in transacations {
-            
-            switch transacation.type {
-                case .income:
-                    total += transacation.amount;
-                case .expense:
-                    total -= transacation.amount;
-            }
-        }
+        var total = sumIncomes - sumExpenses;
+        
+        
         
         let numberFormatter = NumberFormatter();
         numberFormatter.numberStyle = .currency;
