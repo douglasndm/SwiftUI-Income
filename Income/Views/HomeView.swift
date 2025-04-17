@@ -9,12 +9,59 @@ import SwiftUI
 
 struct HomeView: View {
     
-    @State private var transacations: [Transaction] = [
-        Transaction(title: "Apple", type: .expense, amount: 5.00, date: Date()),
-        Transaction(title: "Apple", type: .expense, amount: 5.00, date: Date())
-    ];
+    @State private var transacations: [Transaction] = [];
+    
     @State private var showAddTransactionView: Bool = false;
     @State private var transacationToEdit: Transaction?;
+    
+    var expenses: String {
+        var sumExpenses: Double = 0;
+        
+        for transcation in transacations {
+            if transcation.type == .expense {
+                sumExpenses += transcation.amount;
+            }
+        }
+        
+        let numberFormatter = NumberFormatter();
+        numberFormatter.numberStyle = .currency;
+        
+        return numberFormatter.string(from: sumExpenses as NSNumber) ?? "R$ 0,00";
+    }
+    
+    var incomes: String {
+        var sumIncomes: Double = 0;
+        
+        for transcation in transacations {
+            if transcation.type == .income {
+                sumIncomes += transcation.amount;
+            }
+        }
+        
+        let numberFormatter = NumberFormatter();
+        numberFormatter.numberStyle = .currency;
+        
+        return numberFormatter.string(from: sumIncomes as NSNumber) ?? "R$ 0,00";
+    }
+    
+    var balance: String {
+        var total: Double = 0;
+        
+        for transacation in transacations {
+            
+            switch transacation.type {
+                case .income:
+                    total += transacation.amount;
+                case .expense:
+                    total -= transacation.amount;
+            }
+        }
+        
+        let numberFormatter = NumberFormatter();
+        numberFormatter.numberStyle = .currency;
+        
+        return numberFormatter.string(from: total as NSNumber) ?? "R$ 0,00";
+    }
     
     fileprivate func FloatingButton() -> some View {
         VStack {
@@ -40,12 +87,12 @@ struct HomeView: View {
             
             VStack (alignment: .leading, spacing: 8) {
                 HStack {
-                    VStack {
+                    VStack (alignment: .leading) {
                         Text("BALANCE")
                             .font(.caption)
                             .foregroundStyle(Color.white);
                         
-                        Text("$2")
+                        Text(balance)
                             .font(.system(size: 42, weight: .light))
                             .foregroundStyle(Color.white);
                     }
@@ -58,7 +105,7 @@ struct HomeView: View {
                         Text("Expense")
                             .font(.system(size: 15, weight: .semibold))
                             .foregroundStyle(Color.white);
-                        Text("$22")
+                        Text(expenses)
                             .font(.system(size: 15, weight: .regular))
                             .foregroundStyle(Color.white);
                     }
@@ -67,7 +114,7 @@ struct HomeView: View {
                         Text("Income")
                             .font(.system(size: 15, weight: .semibold))
                             .foregroundStyle(Color.white);
-                        Text("$22")
+                        Text(incomes)
                             .font(.system(size: 15, weight: .regular))
                             .foregroundStyle(Color.white);
                     }
