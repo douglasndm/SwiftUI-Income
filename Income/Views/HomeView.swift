@@ -38,9 +38,7 @@ struct HomeView: View {
         let sumExpenses = transacations.filter({ $0.type == .expense }).reduce(0, { $0 + $1.amount });
         let sumIncomes = transacations.filter({ $0.type == .income }).reduce(0, { $0 + $1.amount });
         
-        var total = sumIncomes - sumExpenses;
-        
-        
+        let total = sumIncomes - sumExpenses;
         
         let numberFormatter = NumberFormatter();
         numberFormatter.numberStyle = .currency;
@@ -127,6 +125,7 @@ struct HomeView: View {
                                     .foregroundStyle(.black);
                             })
                         }
+                        .onDelete(perform: delete)
                         .listRowSeparator(.hidden)
                     }
                     .scrollContentBackground(.hidden)
@@ -152,6 +151,10 @@ struct HomeView: View {
                 }
             }
         }
+    }
+    
+    private func delete(at offsets: IndexSet) {
+        transacations.remove(atOffsets: offsets);
     }
 }
 
