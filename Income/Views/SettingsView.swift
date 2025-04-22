@@ -9,12 +9,13 @@ import SwiftUI
 
 struct SettingsView: View {
     @AppStorage("orderDescending") var orderDescending: Bool = false;
-    @State private var currency: Currency = .usd;
+    @AppStorage("currency") var currency: Currency = .usd;
     @State private var filterMinimun: Double = 0.0;
     
     var numberFormatter: NumberFormatter {
         let numberFormatter = NumberFormatter();
         numberFormatter.numberStyle = .currency;
+        numberFormatter.locale = currency.locale;
         
         return numberFormatter;
     }

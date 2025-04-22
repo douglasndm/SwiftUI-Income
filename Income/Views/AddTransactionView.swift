@@ -19,11 +19,14 @@ struct AddTransactionView: View {
     @State private var showAlert: Bool = false;
     
     @Binding var transactions: [Transaction];
+    @AppStorage("currency") var currency: Currency = .usd;
+    
     @Environment(\.dismiss) var dismiss;
     
     var numberFormatter: NumberFormatter {
         let numberFormatter = NumberFormatter();
         numberFormatter.numberStyle = .currency;
+        numberFormatter.locale = currency.locale;
         
         return numberFormatter;
     }
