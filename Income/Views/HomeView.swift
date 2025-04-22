@@ -15,6 +15,16 @@ struct HomeView: View {
     @State private var transacationToEdit: Transaction?;
     @State private var showSettings = false;
     
+    @AppStorage("orderDescending") var orderDescending = false;
+    
+    private var displayTransactions: [Transaction] {
+        let sortedTransactions = orderDescending ? transacations.sorted(by: {
+            $0.date < $1.date
+        }) : transacations.sorted(by: { $0.date > $1.date })
+        
+        return sortedTransactions;
+    }
+    
     private var expenses: String {
         let sumExpenses = transacations.filter({ $0.type == .expense }).reduce(0, {
             $0 + $1.amount
@@ -118,7 +128,7 @@ struct HomeView: View {
                     BalanceView();
                     
                     List {
-                        ForEach(transacations) { transaction in
+                        ForEach(displayTransactions) { transaction in
                             Button(action: {
                                 transacationToEdit = transaction;
                             }, label: {
