@@ -17,13 +17,16 @@ struct HomeView: View {
     
     @AppStorage("orderDescending") var orderDescending = false;
     @AppStorage("currency") var currency: Currency = .usd;
+    @AppStorage("filterMinimun") var filterMinimun: Double = 0.0;
     
     private var displayTransactions: [Transaction] {
         let sortedTransactions = orderDescending ? transacations.sorted(by: {
             $0.date < $1.date
-        }) : transacations.sorted(by: { $0.date > $1.date })
+        }) : transacations.sorted(by: { $0.date > $1.date });
         
-        return sortedTransactions;
+        let filterTransactions = sortedTransactions.filter({ $0.amount >= filterMinimun })
+        
+        return filterTransactions;
     }
     
     private var expenses: String {

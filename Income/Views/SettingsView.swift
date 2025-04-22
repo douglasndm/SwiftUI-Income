@@ -10,7 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     @AppStorage("orderDescending") var orderDescending: Bool = false;
     @AppStorage("currency") var currency: Currency = .usd;
-    @State private var filterMinimun: Double = 0.0;
+    @AppStorage("filterMinimun") var filterMinimun: Double = 0.0;
     
     var numberFormatter: NumberFormatter {
         let numberFormatter = NumberFormatter();
